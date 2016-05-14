@@ -48,4 +48,23 @@ describe('itako-audio-reader-audio-element', () => {
     assert(tokens[0].meta.audio.playbackRate === 0.5);
     assert(tokens[0].value === text);
   });
+
+  it('should preload the audio token', async () => {
+    const reader = new ItakoAudioReaderAudioElement();
+    const itako = new Itako([reader], [audioTransformer]).setOptions({
+      read: {
+        preload: true,
+      },
+    });
+
+    // request the audio files in before read
+    const [a, b, c] = await itako.read([
+      Itako.createToken('audio', 'http://static.edgy.black/beep.mp3'),
+      Itako.createToken('audio', 'http://static.edgy.black/beep.mp3'),
+      Itako.createToken('audio', 'http://static.edgy.black/beep.mp3'),
+    ]);
+    assert(a.meta.reader.name === 'audio-element');
+    assert(b.meta.preloadStart - a.meta.preloadStart < 100);
+    assert(c.meta.preloadStart - b.meta.preloadStart < 100);
+  });
 });

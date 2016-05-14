@@ -46,7 +46,7 @@
     "conventional-github-releaser": "^1.1.1",
     "eslint": "^2.7.0",
     "eslint-config-airbnb": "^7.0.0",
-    "itako": "^0.1.0",
+    "itako": "^0.3.0",
     "mocha": "^2.4.5",
     "mock-audio-element": "^0.0.0-beta.2",
     "npm-statement": "^0.0.0",

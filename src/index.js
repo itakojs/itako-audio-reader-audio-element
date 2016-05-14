@@ -1,4 +1,3 @@
-// dependencies
 import Promise from 'bluebird';
 
 // @class ItakoAudioReaderAudioElement
@@ -52,20 +51,52 @@ export default class ItakoAudioReaderAudioElement {
       return token;
     }
 
-    return this.play(token.value.url || token.value, token.options)
+    return this.play(token.meta.preload || token.value.url || token.value, token.options)
     .then((audio) => token.setMeta('audio', audio));
   }
 
   /**
+  * @method createAudio
+  * @param {token} token - a itako-token instance
+  * @returns {boolean} - returns true if preloaded
+  */
+  preload(token) {
+    if (token.type !== this.type) {
+      return false;
+    }
+
+    token.setMeta('preloadStart', Date.now());
+    token.setMeta('preload', this.createAudio(token.value.url || token.value));
+    token.meta.preload.then(() => {
+      token.setMeta('preloadEnd', Date.now());
+    });
+    return true;
+  }
+
+  /**
+  * @method createAudio
+  * @param {string} url - an audio url
+  * @returns {promise<audio>} - returns audio instance
+  */
+  createAudio(url) {
+    return new Promise((resolve, reject) => {
+      const audio = new Audio;
+      audio.src = url;
+
+      audio.addEventListener('canplaythrough', () => resolve(audio));
+      audio.addEventListener('error', (event) => reject(event.target.error));
+    });
+  }
+
+  /**
   * @method play
-  * @param {url} url - an audio url
+  * @param {string|promise} url - an audio url or promise
   * @param {object} [options={}] - a gain/playbackRate options
   * @returns {promise} - returns the used nodes after playing
   */
   play(url, options = {}) {
-    return new Promise((resolve) => {
-      const audio = new Audio;
-      audio.src = url;
+    const canplaythrough = url instanceof Promise ? url : this.createAudio(url);
+    return canplaythrough.then((audio) => new Promise((resolve) => {
       audio.volume = options.volume || 1;
       audio.playbackRate = options.pitch || options.speed || 1;
       audio.play();
@@ -79,6 +110,6 @@ export default class ItakoAudioReaderAudioElement {
       });
 
       this.audios.push(audio);
-    });
+    }));
   }
 }

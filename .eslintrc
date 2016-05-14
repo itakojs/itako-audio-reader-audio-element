@@ -18,3 +18,6 @@ rules:
   complexity:
     - 1
     - max: 10
+
+  no-param-reassign:
+    - 1
