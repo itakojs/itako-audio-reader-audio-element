@@ -1,7 +1,7 @@
 {
   "name": "itako-audio-reader-audio-element",
   "description": "itako-v0 Audio Element reader plugin",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "lib/index.js",
   "files": [
     "lib"
