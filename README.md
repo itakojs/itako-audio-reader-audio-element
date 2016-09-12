@@ -36,8 +36,8 @@ Usage
 specify instance as first argument of the [Itako constructor](https://github.com/itakojs/itako#usage) as the value of the array.
 
 ```html
-<script src="https://npmcdn.com/itako"></script>
-<script src="https://npmcdn.com/itako-audio-reader-audio-element"></script>
+<script src="https://unpkg.com/itako"></script>
+<script src="https://unpkg.com/itako-audio-reader-audio-element"></script>
 <script>
 var reader = new ItakoAudioReaderAudioElement('audio', {
   // default gain volume (1~0)
